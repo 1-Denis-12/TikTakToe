@@ -1,0 +1,11 @@
+#board {
+    display: grid;
+    grid-template:50px 50px 50px/ 50px 50px 50px;
+}
+
+.square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+}

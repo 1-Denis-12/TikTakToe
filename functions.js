@@ -8,13 +8,12 @@ function createPlayer(name, mark) {
 
 
 const gameBoard = (function () {
-    const gameArray =  ["0","1","2","3","4","5","6","7","8"];
-    // var turnCounter = 1;
-    const xMark = (num) =>  gameArray[num] != "o" && gameArray[num] != "x" ? gameArray[num] = "x" : console.log("place taken");
-    const oMark = (num) => gameArray[num] != "x" && gameArray[num] != "o" ? gameArray[num] = "o" : console.log("place taken");
-    // const playerTurn = (num) => turnCounter % 2 === 0 ? oMark(num) && turnCounter++ : xMark(num) && turnCounter++;
+    const gameArray =  ["","","","","","","","",""];
+    const xMark = (num) => gameArray[num] == "" ? gameArray[num] = "x" : console.log("place taken");
+    const oMark = (num) => gameArray[num] == "" ? gameArray[num] = "o" : console.log("place taken");
     return {gameArray, oMark, xMark};
 })()
+
 
 
 const game = (function (){
@@ -22,46 +21,94 @@ const game = (function (){
     var winner = ""
     const {xMark, oMark, gameArray} = gameBoard;
     const gameOver = function() {
-        if(gameArray[0] == gameArray[1] && gameArray[0] == gameArray[2]) {
+        if(gameArray[0] != "" && gameArray[0] == gameArray[1] && gameArray[0] == gameArray[2]) {
             winner = `The Winner is: ${gameArray[0]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[3] == gameArray[4] && gameArray[3] == gameArray[5]) {
+        else if(gameArray[3] != "" && gameArray[3] == gameArray[4] && gameArray[3] == gameArray[5]) {
             winner = `The Winner is: ${gameArray[3]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[6] == gameArray[7] && gameArray[6] == gameArray[8]) {
+        else if(gameArray[6] != "" && gameArray[6] == gameArray[7] && gameArray[6] == gameArray[8]) {
             winner = `The Winner is: ${gameArray[6]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[0] == gameArray[3] && gameArray[0] == gameArray[6]) {
+        else if(gameArray[3] != "" && gameArray[0] == gameArray[3] && gameArray[0] == gameArray[6]) {
             winner = `The Winner is: ${gameArray[0]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[1] == gameArray[4] && gameArray[1] == gameArray[7]) {
+        else if(gameArray[4] != "" && gameArray[1] == gameArray[4] && gameArray[1] == gameArray[7]) {
             winner = `The Winner is: ${gameArray[1]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[2] == gameArray[5] && gameArray[2] == gameArray[5]) {
+        else if(gameArray[2] != "" && gameArray[2] == gameArray[5] && gameArray[2] == gameArray[5]) {
             winner = `The Winner is: ${gameArray[2]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[0] == gameArray[4] && gameArray[0] == gameArray[8]) {
+        else if(gameArray[0] != "" && gameArray[0] == gameArray[4] && gameArray[0] == gameArray[8]) {
             winner = `The Winner is: ${gameArray[0]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
-        else if(gameArray[2] == gameArray[4] && gameArray[2] == gameArray[6]) {
+        else if(gameArray[2] != "" && gameArray[2] == gameArray[4] && gameArray[2] == gameArray[6]) {
             winner = `The Winner is: ${gameArray[2]}`;
             console.log(winner);
+            turnCounter = "game over"
         }
     }
-    const playerTurn = (num) => turnCounter % 2 === 0 ? xMark(num) && turnCounter++ && gameOver() : oMark(num) && turnCounter++ && gameOver();
+    const playerTurn = function(num) { 
+        if(turnCounter != "game over") { 
+            if(turnCounter % 2 === 0) {
+                xMark(num) 
+                turnCounter++ 
+                gameOver() 
+                // fillBoard()
+            } 
+            else {
+                oMark(num)
+                turnCounter++
+                gameOver()
+                // fillBoard()
+            }
+        }}
     return {playerTurn, gameArray, winner};
 })()
 
-game.playerTurn(0);
-game.playerTurn(5)
-game.playerTurn(0)
-game.playerTurn(9)
-game.playerTurn(1)
+const render = (function() {
+    const board = document.querySelector("#board");
+    const {gameArray} = gameBoard;
+    const {playerTurn} = game;
+    const fillBoard = ()=> {
+        board.innerHTML = ""
+        for(i = 0; i < 9; i++) {
+        const square = `<div class="square" onclick="playerTurn(${i})"><h1>${gameArray[i]}</h1></div>`
+        board.innerHTML += square;
+       
+        }
+        // const boardSquare = document.querySelectorAll(".square");
+        // boardSquare[0].addEventListener("click", playerTurn(2));
+        // const boardSquare = document.querySelectorAll(".square");
+//         for(i = 0; i < 9; i++){
+//         boardSquare[i].addEventListener("click", playerTurn(i));
+//         boardSquare[i].addEventListener("click", fillBoard);
+//         console.log(i);
+        
+// }
+}
+
+    return {fillBoard};
+})()
+
+// game.playerTurn(0);
+// game.playerTurn(5)
+// game.playerTurn(1)
+// game.playerTurn(8)
+render.fillBoard()
+
 console.log(gameBoard.gameArray)

@@ -68,13 +68,11 @@ const game = (function (){
                 xMark(num) 
                 turnCounter++ 
                 gameOver() 
-                // fillBoard()
             } 
             else {
                 oMark(num)
                 turnCounter++
                 gameOver()
-                // fillBoard()
             }
         }}
     return {playerTurn, gameArray, winner};
@@ -87,28 +85,21 @@ const render = (function() {
     const fillBoard = ()=> {
         board.innerHTML = ""
         for(i = 0; i < 9; i++) {
-        const square = `<div class="square" onclick="playerTurn(${i})"><h1>${gameArray[i]}</h1></div>`
+        const square = `<div class="square"><h1>${gameArray[i]}</h1></div>`
         board.innerHTML += square;
        
         }
-        // const boardSquare = document.querySelectorAll(".square");
-        // boardSquare[0].addEventListener("click", playerTurn(2));
-        // const boardSquare = document.querySelectorAll(".square");
-//         for(i = 0; i < 9; i++){
-//         boardSquare[i].addEventListener("click", playerTurn(i));
-//         boardSquare[i].addEventListener("click", fillBoard);
-//         console.log(i);
+    
+        const boardSquare = document.querySelectorAll(".square");
+        for(let i = 0; i < 9; i++){
+        boardSquare[i].addEventListener("click",  ()=> playerTurn(i));
+        boardSquare[i].addEventListener("click", fillBoard);
         
-// }
+}
 }
 
     return {fillBoard};
 })()
-
-// game.playerTurn(0);
-// game.playerTurn(5)
-// game.playerTurn(1)
-// game.playerTurn(8)
 render.fillBoard()
 
 console.log(gameBoard.gameArray)

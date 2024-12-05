@@ -6,6 +6,16 @@ function createPlayer(name, mark) {
     return {playerName, playerScore, marker}
 }
 
+function player(player1, player2) {
+    const playerone = createPlayer(player1, "o");
+    const playertwo = createPlayer(player2, "x");
+    console.log(playerone);
+    console.log(playertwo);
+    
+    
+    return{playerone, playertwo};
+}
+
 
 const gameBoard = (function () {
     const gameArray =  ["","","","","","","","",""];
@@ -60,30 +70,53 @@ const game = (function (){
             winner = `The Winner is: ${gameArray[2]}`;
             console.log(winner);
             turnCounter = "game over"
+        } 
+        else if (gameArray.every((value) => value != "")) {
+            winner = "It's a tie!!!"
+            console.log(winner)
+            turnCounter = "game over"
         }
     }
     const playerTurn = function(num) { 
         if(turnCounter != "game over") { 
             if(turnCounter % 2 === 0) {
                 xMark(num) 
-                turnCounter++ 
-                gameOver() 
             } 
             else {
                 oMark(num)
-                turnCounter++
-                gameOver()
             }
+            turnCounter++
+            gameOver()
         }}
     return {playerTurn, gameArray, winner};
 })()
 
 const render = (function() {
     const board = document.querySelector("#board");
+    const score = document.querySelector("#title");
     const {gameArray} = gameBoard;
     const {playerTurn} = game;
+    const {playerone, playertwo} = player;
+
+    
+    const gameIntro = ()=> {
+        score.innerHTML = `<div class="playerNames"> 
+                            <form>
+                            <lable for="player1">Player1 name:</lable>
+                            <input type="text" Id="player1" name="player1>
+                            <lable for="player2"player2 name:</lable>
+                            <input type="text Id="player2" name="player2">
+                            <button type="button" onclick="player(this.form.player1.value, this.form.player2.value),render.fillBoard()">Start</button>
+                            </form>
+                        </div>`
+    } 
+
     const fillBoard = ()=> {
-        board.innerHTML = ""
+        board.innerHTML = "";
+        score.innerHTML = `<div class ="playerNames">
+                            <h1>${playerone}</h1>
+                            <h1>${playertwo}</h1>
+                            </div>`;
         for(i = 0; i < 9; i++) {
         const square = `<div class="square"><h1>${gameArray[i]}</h1></div>`
         board.innerHTML += square;
@@ -94,12 +127,13 @@ const render = (function() {
         for(let i = 0; i < 9; i++){
         boardSquare[i].addEventListener("click",  ()=> playerTurn(i));
         boardSquare[i].addEventListener("click", fillBoard);
-        
 }
 }
 
-    return {fillBoard};
+
+    return {fillBoard, gameIntro};
 })()
-render.fillBoard()
+render.gameIntro()
+// render.fillBoard()
 
 console.log(gameBoard.gameArray)

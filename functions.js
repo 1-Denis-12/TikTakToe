@@ -2,18 +2,16 @@
 function createPlayer(name, mark) {
     const playerName = name;
     const marker = mark
-    const playerScore = "";
+    const playerScore = 0;
     return {playerName, playerScore, marker}
 }
 
 function player(player1, player2) {
-    const playerone = createPlayer(player1, "o");
-    const playertwo = createPlayer(player2, "x");
-    console.log(playerone);
-    console.log(playertwo);
-    
-    
-    return{playerone, playertwo};
+    const score = document.querySelector("#title");
+    var playerone = createPlayer(player1, "o");
+    var playertwo = createPlayer(player2, "x");
+    players = {playerone, playertwo};
+    return {players};
 }
 
 
@@ -30,6 +28,7 @@ const game = (function (){
     var turnCounter = 1
     var winner = ""
     const {xMark, oMark, gameArray} = gameBoard;
+    const {playerone, playertwo} = players;
     const gameOver = function() {
         if(gameArray[0] != "" && gameArray[0] == gameArray[1] && gameArray[0] == gameArray[2]) {
             winner = `The Winner is: ${gameArray[0]}`;
@@ -88,34 +87,48 @@ const game = (function (){
             turnCounter++
             gameOver()
         }}
-    return {playerTurn, gameArray, winner};
+        if(winner == "o") {
+            playerone.playerScore += 1;
+        } else if(winner == "x"){
+            playertwo.playerScore += 1;
+        }
+    const restart = function() {
+        turnCounter = 1;
+        winner = "";
+        gameArray =  ["","","","","","","","",""];
+    }
+        
+    return {playerTurn, gameArray, winner, restart};
 })()
 
 const render = (function() {
     const board = document.querySelector("#board");
     const score = document.querySelector("#title");
+    const restartButton = document.querySelector("#restart"); 
     const {gameArray} = gameBoard;
-    const {playerTurn} = game;
-    const {playerone, playertwo} = player;
+    const {playerTurn, restart} = game;
+    
 
     
     const gameIntro = ()=> {
         score.innerHTML = `<div class="playerNames"> 
                             <form>
-                            <lable for="player1">Player1 name:</lable>
-                            <input type="text" Id="player1" name="player1>
-                            <lable for="player2"player2 name:</lable>
-                            <input type="text Id="player2" name="player2">
+                            <lable for="player1"> O name:</lable>
+                            <input type="text" Id="player1" name="player1"value="player 1">
+                            <lable for="player2"> X name:</lable>
+                            <input type="text Id="player2" name="player2" value="player 2">
                             <button type="button" onclick="player(this.form.player1.value, this.form.player2.value),render.fillBoard()">Start</button>
                             </form>
                         </div>`
+        restartButton.innerHTML = `<button class="restart_button" onclick="restart">Restart</button>`
     } 
 
     const fillBoard = ()=> {
+        const {playerone, playertwo} = players;
         board.innerHTML = "";
         score.innerHTML = `<div class ="playerNames">
-                            <h1>${playerone}</h1>
-                            <h1>${playertwo}</h1>
+                            <h1>${playerone.playerName}: ${playerone.playerScore}</h1>
+                            <h1>${playertwo.playerName}: ${playertwo.playerScore}</h1>
                             </div>`;
         for(i = 0; i < 9; i++) {
         const square = `<div class="square"><h1>${gameArray[i]}</h1></div>`
@@ -129,6 +142,7 @@ const render = (function() {
         boardSquare[i].addEventListener("click", fillBoard);
 }
 }
+
 
 
     return {fillBoard, gameIntro};
